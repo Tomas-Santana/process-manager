@@ -2,28 +2,24 @@ package main
 
 import (
 	"fmt"
+	"github.com/fatih/color"
 	"math"
 	"time"
-
-	"github.com/fatih/color"
 )
 
-
 type Process struct {
-	Id 			string
+	Id          string
 	InitialTime int
 	Time        int
 	FinalTime   int
-	RealTime	int
-	Wait 		int
-	WaitRatio	float64
-	Done		bool
+	RealTime    int
+	Wait        int
+	WaitRatio   float64
+	Done        bool
 }
 
 func main() {
 	var processes []Process
-
-
 	color.Red("Welcome to the Process Scheduler Simulator")
 	defaultProcesses := []Process{
 		newProcess("A", 2, 17),
@@ -32,7 +28,7 @@ func main() {
 		newProcess("D", 7, 32),
 		newProcess("E", 6, 48),
 		newProcess("F", 5, 23),
-		newProcess("G", 40,13),
+		newProcess("G", 40, 13),
 		newProcess("H", 4, 37),
 		newProcess("I", 39, 24),
 		newProcess("J", 38, 4),
@@ -70,9 +66,9 @@ func main() {
 	fmt.Println("Input processes")
 	for {
 		var (
-			id string
+			id          string
 			initialTime int
-			time int
+			time        int
 		)
 		color.Blue("Id (type 'end' if there are not more processes to add, type 'default' for default processes): ")
 		fmt.Scan(&id)
@@ -103,7 +99,7 @@ func main() {
 	fmt.Print("Option: ")
 	fmt.Scan(&option)
 
-	switch option {	
+	switch option {
 	case 1:
 		start := time.Now()
 		fifoManager(processes)
@@ -154,16 +150,15 @@ func fifoManager(processes []Process) (float64, float64, float64) {
 		}
 	}
 	var (
-		avgRealTime float64
+		avgRealTime  float64
 		avgWaitRatio float64
-		avgWait float64
+		avgWait      float64
 	)
 	avgRealTime, avgWaitRatio, avgWait = printProcesses(processes)
 
 	return avgRealTime, avgWaitRatio, avgWait
 
 }
-
 func lifoManager(processes []Process) (float64, float64, float64) {
 	idle := true
 	currentTime := 0
@@ -186,15 +181,14 @@ func lifoManager(processes []Process) (float64, float64, float64) {
 		}
 	}
 	var (
-		avgRealTime float64
+		avgRealTime  float64
 		avgWaitRatio float64
-		avgWait float64
+		avgWait      float64
 	)
 	avgRealTime, avgWaitRatio, avgWait = printProcesses(processes)
 
 	return avgRealTime, avgWaitRatio, avgWait
 }
-
 func rrManager(processes []Process, quantum int) (float64, float64, float64) {
 	idle := true
 	currentTime := 0
@@ -222,15 +216,13 @@ func rrManager(processes []Process, quantum int) (float64, float64, float64) {
 		}
 	}
 	var (
-		avgRealTime float64
+		avgRealTime  float64
 		avgWaitRatio float64
-		avgWait float64
+		avgWait      float64
 	)
 	avgRealTime, avgWaitRatio, avgWait = printProcesses(processes)
 
 	return avgRealTime, avgWaitRatio, avgWait
-
-
 }
 
 func calcProcess(process *Process, currentTime int) {
@@ -240,14 +232,14 @@ func calcProcess(process *Process, currentTime int) {
 	process.WaitRatio = float64(process.Time) / float64(process.RealTime)
 }
 
-func printProcesses(processes []Process) (float64, float64, float64){
+func printProcesses(processes []Process) (float64, float64, float64) {
 	color.Red("|Id\t|Init\t|Time\t|Final\t|Real\t|Wait\t|WaitRatio\t|")
 	var (
-		avgRealTime float64
+		avgRealTime  float64
 		avgWaitRatio float64
-		avgWait float64
+		avgWait      float64
 	)
-	for _, p := range(processes) {
+	for _, p := range processes {
 		fmt.Printf(
 			"|%5s\t|%5d\t|%5d\t|%5d\t|%5d\t|%5d\t|%7.2f\t|\n",
 			p.Id,
@@ -276,18 +268,18 @@ func compare(processes []Process, quantum int) {
 	var (
 		fifoProcesses []Process
 		lifoProcesses []Process
-		rrProcesses []Process
-		fifoRT float64
-		fifoW float64
-		fifoWR float64
-		lifoRT float64
-		lifoW float64
-		lifoWR float64
-		rrRT float64
-		rrW float64
-		rrWR float64
+		rrProcesses   []Process
+		fifoRT        float64
+		fifoW         float64
+		fifoWR        float64
+		lifoRT        float64
+		lifoW         float64
+		lifoWR        float64
+		rrRT          float64
+		rrW           float64
+		rrWR          float64
 	)
-	for _, p := range(processes) {
+	for _, p := range processes {
 		fifoProcesses = append(fifoProcesses, p)
 		lifoProcesses = append(lifoProcesses, p)
 		rrProcesses = append(rrProcesses, p)
@@ -315,7 +307,6 @@ func compare(processes []Process, quantum int) {
 	m["FIFO"] = []float64{fifoRT, fifoWR, fifoW}
 	m["LIFO"] = []float64{lifoRT, lifoWR, lifoW}
 	m["RR"] = []float64{rrRT, rrWR, rrW}
-
 
 	color.Red("|Algorithm\t|Real Time\t\t|Wait Ratio\t\t|Wait\t|")
 	for k, v := range m {
@@ -359,4 +350,3 @@ func compare(processes []Process, quantum int) {
 func newProcess(id string, initialTime int, time int) Process {
 	return Process{id, initialTime, time, 0, 0, 0, 0, false}
 }
-
