@@ -354,8 +354,6 @@ func compare(processes []Process, quantum int) {
 	fmt.Printf("LIFO Time elapsed: %s\n", lifoElapsed)
 	fmt.Printf("RR Time elapsed: %s\n", rrElapsed)
 
-
-
 }
 
 func newProcess(id string, initialTime int, time int) Process {
