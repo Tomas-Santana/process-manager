@@ -2,8 +2,10 @@ package main
 
 import (
 	"fmt"
-	"github.com/fatih/color"
+	"math"
 	"time"
+
+	"github.com/fatih/color"
 )
 
 
@@ -64,21 +66,6 @@ func main() {
 		newProcess("L1", 11, 40),
 		newProcess("M1", 10, 29),
 	}
-
-	// defaultProcesses := []Process{
-	// 	newProcess("A", 2, 1),
-	// 	newProcess("B", 6, 6),
-	// 	newProcess("C", 5, 3),
-	// 	newProcess("D", 9, 5),
-	// 	newProcess("E", 11, 4),
-	// 	newProcess("F", 15, 10),
-	// 	newProcess("G", 7, 9),
-	// 	newProcess("H", 3, 7),
-	// 	newProcess("I", 8, 2),
-	// 	newProcess("J", 4, 8),
-	// 	newProcess("K", 12, 11),
-	// 	newProcess("L", 16, 12),
-	// }
 
 	fmt.Println("Input processes")
 	for {
@@ -275,9 +262,12 @@ func printProcesses(processes []Process) (float64, float64, float64){
 		avgWaitRatio += p.WaitRatio
 		avgWait += float64(p.Wait)
 	}
-	color.Blue("Average Real Time: %.5f\n", avgRealTime / float64(len(processes)))
-	color.Green("Average Wait Ratio: %.5f\n", avgWaitRatio / float64(len(processes)))
-	color.Yellow("Average Wait: %.5f\n", avgWait / float64(len(processes)))
+	avgRealTime /= float64(len(processes))
+	avgWaitRatio /= float64(len(processes))
+	avgWait /= float64(len(processes))
+	color.Blue("Average Real Time: %.5f\n", avgRealTime)
+	color.Green("Average Wait Ratio: %.5f\n", avgWaitRatio)
+	color.Yellow("Average Wait: %.5f\n", avgWait)
 
 	return avgRealTime, avgWaitRatio, avgWait
 }
@@ -315,19 +305,50 @@ func compare(processes []Process, quantum int) {
 
 	fmt.Println("\nRR")
 	rrStart := time.Now()
-	rrRT, rrWR, rrWR = rrManager(rrProcesses, quantum)
+	rrRT, rrWR, rrW = rrManager(rrProcesses, quantum)
 	rrElapsed := time.Since(rrStart)
 
 	// map to store the results
 
-	var m map[string][]float64
-
-	m = make(map[string][]float64)
+	m := make(map[string][]float64)
 
 	m["FIFO"] = []float64{fifoRT, fifoWR, fifoW}
 	m["LIFO"] = []float64{lifoRT, lifoWR, lifoW}
 	m["RR"] = []float64{rrRT, rrWR, rrW}
 
+
+	color.Red("|Algorithm\t|Real Time\t\t|Wait Ratio\t\t|Wait\t|")
+	for k, v := range m {
+		fmt.Printf("|%s\t\t|%.5f\t\t|%.5f\t\t|%.5f\t|\n", k, v[0], v[1], v[2])
+	}
+
+	bestWait := math.MaxFloat64
+	stringBestWait := ""
+	bestRT := math.MaxFloat64
+	stringBestRT := ""
+	bestWR := 0.0
+	stringBestWR := ""
+
+	for k, v := range m {
+		if v[2] < bestWait {
+			bestWait = v[2]
+			stringBestWait = k
+
+		}
+		if v[0] < bestRT {
+			bestRT = v[0]
+			stringBestRT = k
+		}
+		if v[1] > bestWR {
+			bestWR = v[1]
+			stringBestWR = k
+		}
+
+	}
+
+	fmt.Printf("\nBest Wait: %s\n", stringBestWait)
+	fmt.Printf("Best Real Time: %s\n", stringBestRT)
+	fmt.Printf("Best Wait Ratio: %s\n", stringBestWR)
 
 	fmt.Printf("FIFO Time elapsed: %s\n", fifoElapsed)
 	fmt.Printf("LIFO Time elapsed: %s\n", lifoElapsed)
