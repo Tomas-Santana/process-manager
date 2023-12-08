@@ -1,0 +1,47 @@
+[
+    {
+        "id":"p1", 
+        "initialTime": 0, 
+        "time": 8, 
+        "finalTime": 0, 
+        "realTime": 0, 
+        "waitRatio": 0.0, 
+        "done": false
+    },
+    {
+        "id":"p2", 
+        "initialTime": 0, 
+        "time": 4, 
+        "finalTime": 0, 
+        "realTime": 0, 
+        "waitRatio": 0.0, 
+        "done": false
+    },
+    {
+        "id":"p3", 
+        "initialTime": 0, 
+        "time": 9, 
+        "finalTime": 0, 
+        "realTime": 0, 
+        "waitRatio": 0.0, 
+        "done": false
+    },
+    {
+        "id":"p4", 
+        "initialTime": 0, 
+        "time": 5, 
+        "finalTime": 0, 
+        "realTime": 0, 
+        "waitRatio": 0.0, 
+        "done": false
+    },
+    {
+        "id":"p5", 
+        "initialTime": 0, 
+        "time": 7, 
+        "finalTime": 0, 
+        "realTime": 0, 
+        "waitRatio": 0.0, 
+        "done": false
+    }
+]
